@@ -1,10 +1,14 @@
 import { useState } from 'react';
 import Styles from './itemboard.module.css';
+import PropTypes from 'prop-types';
 
 let arr = [0, 0, 0, 0, 0, 0, 0, 0, 0];
 
 const setitem = (value, setValue, setChange, change, number) => {
 	if (value !== '') {
+		return;
+	}
+	if (setWin(arr)) {
 		return;
 	}
 	change ? setValue('X') : setValue('O');
@@ -54,9 +58,22 @@ const StateLessitem = ({ change, setChange, value0, value1, value2, value3, valu
 	);
 };
 
+StateLessitem.propTypes = {
+	change : PropTypes.bool,
+	value0 : PropTypes.string,
+	value1 : PropTypes.string,
+	value2 : PropTypes.string,
+	value3 : PropTypes.string,
+	value4 : PropTypes.string,
+	value5 : PropTypes.string,
+	value6 : PropTypes.string,
+	value7 : PropTypes.string,
+	value8 : PropTypes.string,
+}
+
 const RestartBtn = ({setChange, setValue0, setValue1, setValue2, setValue3, setValue4, setValue5, setValue6, setValue7, setValue8 }) => {
 	return (
-		<button className = {Styles.RestartBtn} onClick={() =>{
+		<button className = {Styles.restartBtn} onClick={() =>{
 			setChange(true);
 			setValue0('');
 			setValue1('');
@@ -75,14 +92,22 @@ const RestartBtn = ({setChange, setValue0, setValue1, setValue2, setValue3, setV
 	);
 };
 
-export const Inform = ({change}) => {
+const Inform = ({change}) => {
+	const movePlayer = change ? 'Ходят крестики' : 'Ходят нолики'
+	const drawOrwin = arr.includes(0) ?  movePlayer: 'Ничья';
+
 	return (
 		<div className = {Styles.inform}>
-			{change ? 'Ходят крестики' : 'Ходят нолики'}
+			{setWin(arr) ? 'Игра окончена' : drawOrwin}
 		</div>
 	)
 }
-export const InformWin = () => {
+
+Inform.propTypes = {
+	change : PropTypes.bool,
+}
+
+const InformWin = () => {
 	return (
 		<div className = {Styles.inform}>
 			{setWin(arr)}
@@ -90,7 +115,7 @@ export const InformWin = () => {
 	)
 }
 
-export const SetFullItemboard = () => {
+export default function SetFullItemboard  () {
 	const [change, setChange] = useState(true);
 	const [value0, setValue0] = useState('');
 	const [value1, setValue1] = useState('');
@@ -102,9 +127,8 @@ export const SetFullItemboard = () => {
 	const [value7, setValue7] = useState('');
 	const [value8, setValue8] = useState('');
 
-	
 	return (
-		<>
+		<div className = {Styles.gameArea}>
 		<Inform change={change} />
 		<InformWin />
 		<StateLessitem
@@ -141,7 +165,6 @@ export const SetFullItemboard = () => {
 			setValue7={setValue7}
 			setValue8={setValue8}
 		/>
-		</>
-
+		</div>
 	);
 };

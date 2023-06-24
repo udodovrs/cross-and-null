@@ -1,8 +1,8 @@
-import { Board } from './components/board';
+import SetFullItemboard  from './components/itemboard'
 
 export const App = () => {
 	return (
-		 <Board />
+		 <SetFullItemboard />
 	);
 }
 
